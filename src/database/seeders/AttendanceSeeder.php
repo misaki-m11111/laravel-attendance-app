@@ -38,6 +38,7 @@ class AttendanceSeeder extends Seeder
                         [
                             'clock_in' => $pattern['clock_in'],
                             'clock_out' => $pattern['clock_out'],
+                            'status' => '退勤済',
                             'created_at' => $now,
                             'updated_at' => $now,
                         ]
