@@ -30,4 +30,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('/attendance', [AttendanceController::class, 'store'])
         ->name('attendance.store');
+
+    Route::get('/attendance/list',[AttendanceController::class,'monthlyList'])->name('attendance.list');
 });

@@ -87,4 +87,48 @@ class AttendanceController extends Controller
 
         return redirect()->route('attendance.index');
     }
+
+    public function monthlyList(Request $request)
+    {
+        if ($request->input('month')) {
+            $currentMonth = Carbon::parse($request->input('month') . '-01');
+        } else {
+            $currentMonth = Carbon::now();
+        }
+
+        $startOfMonth = $currentMonth->copy()->startOfMonth();
+        $endOfMonth = $currentMonth->copy()->endOfMonth();
+
+        $previousMonth = $currentMonth->copy()->subMonth()->format('Y-m');
+        $nextMonth = $currentMonth->copy()->addMonth()->format('Y-m');
+
+        $attendances = Attendance::with('breakTimes')
+            ->where('user_id', Auth::id())
+            ->whereBetween('attendance_date', [
+                $startOfMonth->toDateString(),
+                $endOfMonth->toDateString(),
+            ])
+            ->orderBy('attendance_date')
+            ->get();
+
+        $attendanceByDate = $attendances->keyBy(function ($attendance) {
+            return Carbon::parse($attendance->attendance_date)->toDateString();
+        });
+
+        $calendarDates = [];
+        $date = $startOfMonth->copy();
+
+        while ($date->lte($endOfMonth)) {
+            $calendarDates[] = $date->copy();
+            $date->addDay();
+        }
+
+        return view('attendance.list', compact(
+            'currentMonth',
+            'previousMonth',
+            'nextMonth',
+            'attendanceByDate',
+            'calendarDates'
+        ));
+    }
 }
