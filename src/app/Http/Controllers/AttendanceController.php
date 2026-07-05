@@ -131,4 +131,21 @@ class AttendanceController extends Controller
             'calendarDates'
         ));
     }
+
+    public function detail($id)
+    {
+        $attendance = Attendance::with('breakTimes')
+            ->where('user_id', Auth::id())
+            ->findOrFail($id);
+
+        $user = Auth::user();
+
+        $pendingRequest = \App\Models\AttendanceRequest::where('attendance_id', $attendance->id)
+            ->where('user_id', Auth::id())
+            ->where('status', 0)
+            ->latest()
+            ->first();
+
+        return view('attendance.detail', compact('attendance', 'user', 'pendingRequest'));
+    }
 }

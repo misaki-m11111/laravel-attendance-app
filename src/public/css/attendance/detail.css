@@ -1,0 +1,130 @@
+body {
+    background-color: #f1f1f4;
+}
+
+.attendance-detail {
+    max-width: 760px;
+    margin: 70px auto 0;
+}
+
+.attendance-detail__title {
+    padding-left: 18px;
+    border-left: 6px solid #000;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 40px;
+}
+
+.attendance-detail__card {
+    background-color: #fff;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.attendance-detail__row {
+    display: flex;
+    align-items: center;
+    min-height: 70px;
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.attendance-detail__row:last-child {
+    border-bottom: none;
+}
+
+.attendance-detail__row--textarea {
+    align-items: flex-start;
+    padding: 16px 0;
+}
+
+.attendance-detail__label {
+    width: 220px;
+    padding-left: 50px;
+    color: #737373;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.attendance-detail__value {
+    flex: 1;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.attendance-detail__name {
+    letter-spacing: 0.2em;
+}
+
+.attendance-detail__date {
+    display: flex;
+    gap: 90px;
+}
+
+.attendance-detail__time {
+    display: flex;
+    align-items: center;
+    gap: 35px;
+}
+
+.attendance-detail__input {
+    width: 80px;
+    height: 26px;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    background-color: #fff;
+}
+
+.attendance-detail__separator {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.attendance-detail__textarea {
+    width: 260px;
+    height: 58px;
+    padding: 8px;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    resize: none;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.attendance-detail__button-area {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 35px;
+}
+
+.attendance-detail__button {
+    width: 100px;
+    height: 40px;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.attendance-detail__button:hover {
+    opacity: 0.8;
+}
+
+.attendance-detail__pending-message {
+    color: #ff0000;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.attendance-detail__input[readonly],
+.attendance-detail__textarea[readonly] {
+    border: none;
+    background-color: transparent;
+    outline: none;
+    cursor: default;
+}

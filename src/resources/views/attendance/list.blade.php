@@ -12,10 +12,7 @@
             <h1 class="attendance-list__title">勤怠一覧</h1>
 
             <div class="attendance-list__month-nav">
-                <a
-                    class="attendance-list__month-link"
-                    href="{{ route('attendance.list', ['month' => $previousMonth]) }}"
-                >
+                <a class="attendance-list__month-link" href="{{ route('attendance.list', ['month' => $previousMonth]) }}">
                     ← 前月
                 </a>
 
@@ -24,10 +21,7 @@
                     <span>{{ $currentMonth->format('Y/m') }}</span>
                 </div>
 
-                <a
-                    class="attendance-list__month-link"
-                    href="{{ route('attendance.list', ['month' => $nextMonth]) }}"
-                >
+                <a class="attendance-list__month-link" href="{{ route('attendance.list', ['month' => $nextMonth]) }}">
                     翌月 →
                 </a>
             </div>
@@ -56,20 +50,24 @@
                             if ($attendance) {
                                 foreach ($attendance->breakTimes as $breakTime) {
                                     if ($breakTime->break_start && $breakTime->break_end) {
-                                        $breakMinutes += \Carbon\Carbon::parse($breakTime->break_start)
-                                            ->diffInMinutes(\Carbon\Carbon::parse($breakTime->break_end));
+                                        $breakMinutes += \Carbon\Carbon::parse($breakTime->break_start)->diffInMinutes(
+                                            \Carbon\Carbon::parse($breakTime->break_end),
+                                        );
                                     }
                                 }
 
                                 if ($attendance->clock_in && $attendance->clock_out) {
-                                    $workMinutes = \Carbon\Carbon::parse($attendance->clock_in)
-                                        ->diffInMinutes(\Carbon\Carbon::parse($attendance->clock_out)) - $breakMinutes;
+                                    $workMinutes =
+                                        \Carbon\Carbon::parse($attendance->clock_in)->diffInMinutes(
+                                            \Carbon\Carbon::parse($attendance->clock_out),
+                                        ) - $breakMinutes;
                                 }
                             }
 
-                            $breakTimeText = $breakMinutes > 0
-                                ? sprintf('%d:%02d', intdiv($breakMinutes, 60), $breakMinutes % 60)
-                                : '';
+                            $breakTimeText =
+                                $breakMinutes > 0
+                                    ? sprintf('%d:%02d', intdiv($breakMinutes, 60), $breakMinutes % 60)
+                                    : '';
 
                             $workTimeText = !is_null($workMinutes)
                                 ? sprintf('%d:%02d', intdiv($workMinutes, 60), $workMinutes % 60)
@@ -98,9 +96,15 @@
                             </td>
 
                             <td>
-                                <a class="attendance-list__detail-link" href="#">
-                                    詳細
-                                </a>
+                                @if ($attendance)
+                                    <a href="{{ route('attendance.detail', $attendance->id) }}" class="detail-link">
+                                        詳細
+                                    </a>
+                                @else
+                                    <span class="detail-link detail-link--disabled">
+                                        詳細
+                                    </span>
+                                @endif
                             </td>
                         </tr>
                     @endforeach
