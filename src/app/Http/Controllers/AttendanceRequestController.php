@@ -41,4 +41,21 @@ class AttendanceRequestController extends Controller
 
         return redirect()->route('attendance.detail', $attendance->id);
     }
+
+    public function index(Request $request)
+    {
+        $tab = $request->query('tab', 'pending');
+        $status = $tab === 'approved' ? 1 : 0;
+
+        $attendanceRequests = AttendanceRequest::with([
+            'user',
+            'attendance'
+        ])
+            ->where('user_id', Auth::id())
+            ->where('status', $status)
+            ->latest()
+            ->get();
+
+            return view('attendance_request.list',compact('attendanceRequests','tab'));
+    }
 }
