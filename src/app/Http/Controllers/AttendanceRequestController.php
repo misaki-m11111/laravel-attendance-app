@@ -11,7 +11,31 @@ use Illuminate\Support\Facades\Auth;
 
 class AttendanceRequestController extends Controller
 {
-    public function store(Request $request, $id)
+
+    public function index(Request $request)
+    {
+        $tab = $request->query('tab', 'pending');
+        $status = $tab === 'approved' ? 1 : 0;
+
+        $isAdmin = Auth::guard('admin')->check();
+
+        $query = AttendanceRequest::with([
+            'user',
+            'attendance'
+        ])
+            ->where('status', $status);
+
+        if (!$isAdmin) {
+            $query->where('user_id', Auth::guard('web')->id());
+        }
+
+        $attendanceRequests = $query
+            ->latest()
+            ->get();
+
+        return view('attendance_request.list', compact('attendanceRequests', 'tab', 'isAdmin'));
+    }
+    public function store(Request $request, string $id)
     {
         $attendance = Attendance::where('user_id', Auth::id())
             ->findOrFail($id);
@@ -40,22 +64,5 @@ class AttendanceRequestController extends Controller
         }
 
         return redirect()->route('attendance.detail', $attendance->id);
-    }
-
-    public function index(Request $request)
-    {
-        $tab = $request->query('tab', 'pending');
-        $status = $tab === 'approved' ? 1 : 0;
-
-        $attendanceRequests = AttendanceRequest::with([
-            'user',
-            'attendance'
-        ])
-            ->where('user_id', Auth::id())
-            ->where('status', $status)
-            ->latest()
-            ->get();
-
-            return view('attendance_request.list',compact('attendanceRequests','tab'));
     }
 }

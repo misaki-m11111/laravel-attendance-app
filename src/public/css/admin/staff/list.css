@@ -1,0 +1,84 @@
+.staff-list {
+    min-height: calc(100vh - 80px);
+    padding: 70px 20px;
+    background-color: #f1f1f4;
+}
+
+.staff-list__inner {
+    width: 60%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.staff-list__title {
+    margin: 0 0 60px;
+    padding-left: 16px;
+    border-left: 7px solid #000;
+    color: #000;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.staff-list__table-wrapper {
+    overflow: hidden;
+    background-color: #fff;
+    border-radius: 8px;
+}
+
+.staff-list__table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.staff-list__table th,
+.staff-list__table td {
+    padding: 14px 20px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.staff-list__table th {
+    color: #737373;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+}
+
+.staff-list__table td {
+    color: #737373;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+}
+
+.staff-list__table th:nth-child(1),
+.staff-list__table td:nth-child(1) {
+    width: 30%;
+}
+
+.staff-list__table th:nth-child(2),
+.staff-list__table td:nth-child(2) {
+    width: 45%;
+}
+
+.staff-list__table th:nth-child(3),
+.staff-list__table td:nth-child(3) {
+    width: 25%;
+}
+
+.staff-list__table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.staff-list__detail-link {
+    color: #000;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.staff-list__detail-link:hover {
+    text-decoration: underline;
+}

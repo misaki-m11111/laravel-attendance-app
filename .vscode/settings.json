@@ -1,12 +1,18 @@
 {
   "cSpell.words": [
+    "breaktimes",
     "enderror",
     "endforeach",
+    "endforelse",
     "endphp",
     "endsection",
+    "forelse",
+    "intdiv",
     "laravel",
     "mysqld",
+    "onchange",
     "phpmyadmin",
+    "sprintf",
     "stylesheet"
   ]
 }

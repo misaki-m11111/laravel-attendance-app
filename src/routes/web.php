@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AttendanceRequestController;
+use App\Http\Controllers\AdminAttendanceController;
+use App\Http\Controllers\AdminStaffController;
 
 Route::get('/admin/login', [AuthenticatedSessionController::class, 'create'])
     ->middleware('guest:admin')
@@ -17,13 +19,20 @@ Route::post('/admin/logout', [AuthenticatedSessionController::class, 'destroy'])
     ->middleware(['auth:admin', 'fortify.admin'])
     ->name('admin.logout');
 
-Route::middleware('auth:admin')->get('/admin/home', function () {
-    return '管理者用の仮ページです';
-})->name('admin.home');
+Route::middleware('auth:admin')->group(function () {
+    Route::get(
+        '/admin/attendance/list',
+        [AdminAttendanceController::class, 'index']
+    )->name('admin.attendance.list');
 
-Route::middleware(['auth', 'verified'])->get('/home', function () {
-    return view('home');
-})->name('home');
+    Route::get('/admin/attendance/{id}', [AdminAttendanceController::class, 'show'])->name('admin.attendance.show');
+
+    Route::put('/admin/attendance/{id}', [AdminAttendanceController::class, 'update'])->name('admin.attendance.update');
+
+    Route::get('/admin/staff/list', [AdminStaffController::class, 'index'])->name('admin.staff.list');
+
+    Route::get('/admin/attendance/staff/{id}',[AdminStaffController::class,'show'])->name('admin.staff.show');
+});
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/attendance', [AttendanceController::class, 'index'])
@@ -37,6 +46,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/attendance/detail/{id}', [AttendanceController::class, 'detail'])->name('attendance.detail');
 
     Route::post('/attendance/detail/{id}', [AttendanceRequestController::class, 'store'])->name('attendance.request.store');
-
-    Route::get('/stamp_correction_request/list',[AttendanceRequestController::class,'index'])->name('attendance.request.index');
 });
+
+Route::get(
+    '/stamp_correction_request/list',
+    [AttendanceRequestController::class, 'index']
+)
+    ->middleware('auth:admin,web')
+    ->name('attendance.request.index');

@@ -1,0 +1,143 @@
+.staff-attendance {
+    min-height: calc(100vh - 80px);
+    padding: 55px 20px 80px;
+    background-color: #f1f1f4;
+}
+
+.staff-attendance__inner {
+    width: 60%;
+    min-width: 620px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.staff-attendance__title {
+    margin: 0 0 35px;
+    padding-left: 15px;
+    border-left: 7px solid #000;
+    color: #000;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.staff-attendance__month-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    padding: 14px 18px;
+    background-color: #fff;
+    border-radius: 8px;
+}
+
+.staff-attendance__month-link {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #737373;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.staff-attendance__month-link:hover {
+    color: #000;
+}
+
+.staff-attendance__current-month {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #000;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.staff-attendance__calendar-icon {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* テーブル */
+
+.staff-attendance__table-wrapper {
+    overflow: hidden;
+    background-color: #fff;
+    border-radius: 8px;
+}
+
+.staff-attendance__table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.staff-attendance__table th,
+.staff-attendance__table td {
+    padding: 11px 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.staff-attendance__table th {
+    color: #737373;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+}
+
+.staff-attendance__table td {
+    color: #737373;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+}
+
+.staff-attendance__table th:first-child,
+.staff-attendance__table td:first-child {
+    width: 24%;
+}
+
+.staff-attendance__table th:nth-child(2),
+.staff-attendance__table td:nth-child(2),
+.staff-attendance__table th:nth-child(3),
+.staff-attendance__table td:nth-child(3),
+.staff-attendance__table th:nth-child(4),
+.staff-attendance__table td:nth-child(4),
+.staff-attendance__table th:nth-child(5),
+.staff-attendance__table td:nth-child(5) {
+    width: 15%;
+}
+
+.staff-attendance__table th:last-child,
+.staff-attendance__table td:last-child {
+    width: 16%;
+}
+
+.staff-attendance__table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.staff-attendance__detail-link {
+    color: #000;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.staff-attendance__detail-link:hover {
+    text-decoration: underline;
+}
+
+.staff-attendance__detail-link--disabled {
+    color: #aaa;
+    cursor: default;
+    pointer-events: none;
+    user-select: none;
+}
