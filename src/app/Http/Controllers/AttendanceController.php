@@ -7,10 +7,15 @@ use App\Models\BreakTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class AttendanceController extends Controller
 {
-    public function index()
+    /**
+     * 勤怠登録画面を表示する。
+     */
+    public function index(): view
     {
         $today = Carbon::today();
 
@@ -23,7 +28,10 @@ class AttendanceController extends Controller
         return view('attendance.index', compact('attendance', 'status'));
     }
 
-    public function store(Request $request)
+    /**
+     * 出勤・退勤・休憩入・休憩戻の打刻処理を行う。
+     */
+    public function store(Request $request): RedirectResponse
     {
         $action = $request->input('action');
 

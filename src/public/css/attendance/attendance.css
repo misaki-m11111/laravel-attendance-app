@@ -1,0 +1,85 @@
+.attendance-page {
+    min-height: calc(100vh - 80px);
+    background-color: #f0eff2;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 140px;
+}
+
+.attendance-card {
+    text-align: center;
+}
+
+.attendance-status {
+    width: 100px;
+    height: 40px;
+    margin: 0 auto 28px;
+    background-color: #c8c8c8;
+    color: #696969;
+    border-radius: 50px;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+}
+
+.attendance-date {
+    margin: 36px 0 32px;
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 48px;
+    color: #000000;
+    white-space: nowrap;
+}
+
+.attendance-date__weekday {
+    margin-left: -1px;
+}
+
+.attendance-time {
+    font-size: 80px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    margin: 0 0 70px;
+    color: #000000;
+}
+
+.attendance-button-group {
+    display: flex;
+    justify-content: center;
+    gap: 80px;
+}
+
+.attendance-button {
+    width: 221px;
+    height: 77px;
+    border-radius: 20px;
+    border: none;
+    font-size: 32px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.attendance-button--black {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+.attendance-button--white {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+.attendance-message {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    margin-top: -20px;
+    color: #000;
+}

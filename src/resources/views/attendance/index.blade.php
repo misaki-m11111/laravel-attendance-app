@@ -3,7 +3,7 @@
 @section('title', '勤怠登録')
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('css/attendance.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/attendance/attendance.css') }}">
 @endsection
 
 @section('content')
@@ -17,7 +17,8 @@
             @endphp
 
             <p class="attendance-date">
-                {{ $today->format('Y年n月j日') }}（{{ $weekdays[$today->dayOfWeek] }}）
+                {{ $today->format('Y年n月j日') }}<span
+                    class="attendance-date__weekday">({{ $weekdays[$today->dayOfWeek] }})</span>
             </p>
 
             <p class="attendance-time">{{ now()->format('H:i') }}</p>

@@ -4,14 +4,14 @@ namespace App\Http\Requests;
 
 use Laravel\Fortify\Http\Requests\LoginRequest as FortifyLoginRequest;
 
-class AdminLoginRequest extends FortifyLoginRequest
+class UserLoginRequest extends FortifyLoginRequest
 {
-    public function authorize(): bool
+    public function authorize()
     {
         return true;
     }
 
-    public function rules(): array
+    public function rules()
     {
         return [
             'email' => ['required'],
@@ -19,7 +19,7 @@ class AdminLoginRequest extends FortifyLoginRequest
         ];
     }
 
-    public function messages(): array
+    public function messages()
     {
         return [
             'email.required' => 'メールアドレスを入力してください',

@@ -1,11 +1,13 @@
 .form {
-    width: 500px;
+    width: 680px;
     margin: 60px auto;
+    line-height: 1;
+    font-weight: 700;
 }
 
 .form__title {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 45px;
     font-size: 36px;
 }
 
@@ -16,45 +18,54 @@
 .form__label {
     display: block;
     margin-bottom: 10px;
-    font-weight: 700;
+    font-size: 24px;
 }
 
 .form__input {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #5f5f5f;
-    border-radius: 5px;
-    background: #fff;
+    height: 45px;
+    padding: 0 10px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    border: 1px solid #000000;
+    border-radius: 4px;
+    background-color: #ffffff;
     box-shadow: none;
     outline: none;
 }
 
 .form__button {
     background-color: #000000;
-    color: #fff;
+    color: #ffffff;
     width: 100%;
+    height: 60px;
     padding: 10px;
     margin-top: 20px;
     border-radius: 5px;
-    font-size: 16px;
+    font-size: 26px;
     box-shadow: none;
     border: none;
-    font-weight: 700;
     cursor: pointer;
 }
 
 .form__error {
-    color: red;
+    margin-top: 2px;
+    color: #ff0000;
     font-size: 14px;
-    margin-top: 5px;
+    font-weight: 400;
 }
 
 .form__link {
-    margin-top: 20px;
+    margin-top: 17px;
     text-align: center;
 }
 
 .form__link a {
     color: #0073cc;
+    font-weight: 400;
     text-decoration: none;
+}
+
+.form--login .form__group {
+    margin-bottom: 45px;
 }

@@ -3,10 +3,10 @@
 @section('title', 'ログイン')
 
 @section('content')
-<div class="form">
+<div class="form form--login">
     <h1 class="form__title">ログイン</h1>
 
-    <form method="POST" action="{{ route('login') }}" class="form__form">
+    <form method="POST" action="{{ route('login') }}" class="form__form" novalidate>
         @csrf
 
         <div class="form__group">
@@ -34,7 +34,7 @@
             @enderror
         </div>
 
-        <button type="submit" class="form__button">ログイン</button>
+        <button type="submit" class="form__button">ログインする</button>
     </form>
 
     <p class="form__link">

@@ -6,7 +6,7 @@
     <div class="form">
         <h1 class="form__title">会員登録</h1>
 
-        <form method="POST" action={{ route('register') }} class="form__form">
+        <form method="POST" action={{ route('register') }} class="form__form" novalidate>
             @csrf
 
             <div class="form__group">
@@ -37,7 +37,7 @@
             </div>
 
             <div class="form__group">
-                <label class="form__label">確認用パスワード</label>
+                <label class="form__label">パスワード確認</label>
                 <input type="password" name="password_confirmation" class="form__input">
 
                 @error('password_confirmation')
