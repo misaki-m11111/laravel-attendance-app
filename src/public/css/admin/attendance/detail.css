@@ -158,3 +158,9 @@
     font-size: 14px;
     font-weight: 700;
 }
+
+.attendance-detail__button--approved {
+    background-color: #696969;
+    cursor: default;
+    opacity: 0.7;
+}

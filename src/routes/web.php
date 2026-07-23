@@ -6,6 +6,7 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AttendanceRequestController;
 use App\Http\Controllers\AdminAttendanceController;
 use App\Http\Controllers\AdminStaffController;
+use App\Http\Controllers\AdminAttendanceRequestController;
 
 Route::get('/admin/login', [AuthenticatedSessionController::class, 'create'])
     ->middleware('guest:admin')
@@ -25,13 +26,32 @@ Route::middleware('auth:admin')->group(function () {
         [AdminAttendanceController::class, 'index']
     )->name('admin.attendance.list');
 
-    Route::get('/admin/attendance/{id}', [AdminAttendanceController::class, 'show'])->name('admin.attendance.show');
+    Route::get('/admin/attendance/{id}', [AdminAttendanceController::class, 'show'])
+        ->where('attendance_correct_request_id', '[0-9]+')
+        ->name('admin.attendance.show');
 
-    Route::put('/admin/attendance/{id}', [AdminAttendanceController::class, 'update'])->name('admin.attendance.update');
+    Route::put('/admin/attendance/{id}', [AdminAttendanceController::class, 'update'])
+        ->where('attendance_correct_request_id', '[0-9]+')->name('admin.attendance.update');
 
     Route::get('/admin/staff/list', [AdminStaffController::class, 'index'])->name('admin.staff.list');
 
-    Route::get('/admin/attendance/staff/{id}',[AdminStaffController::class,'show'])->name('admin.staff.show');
+    Route::get('/admin/attendance/staff/{id}', [AdminStaffController::class, 'show'])
+        ->where('attendance_correct_request_id', '[0-9]+')
+        ->name('admin.staff.show');
+
+    Route::get(
+        '/stamp_correction_request/approve/{attendance_correct_request_id}',
+        [AdminAttendanceRequestController::class, 'show']
+    )
+        ->where('attendance_correct_request_id', '[0-9]+')
+        ->name('admin.attendance.request.show');
+
+    Route::patch(
+        '/stamp_correction_request/approve/{attendance_correct_request_id}',
+        [AdminAttendanceRequestController::class, 'approve']
+    )
+        ->where('attendance_correct_request_id', '[0-9]+')
+        ->name('admin.attendance.request.approve');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -43,9 +63,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/attendance/list', [AttendanceController::class, 'monthlyList'])->name('attendance.list');
 
-    Route::get('/attendance/detail/{id}', [AttendanceController::class, 'detail'])->name('attendance.detail');
+    Route::get('/attendance/detail/{id}', [AttendanceController::class, 'detail'])
+        ->where('attendance_correct_request_id', '[0-9]+')
+        ->name('attendance.detail');
 
-    Route::post('/attendance/detail/{id}', [AttendanceRequestController::class, 'store'])->name('attendance.request.store');
+    Route::post('/attendance/detail/{id}', [AttendanceRequestController::class, 'store'])
+        ->where('attendance_correct_request_id', '[0-9]+')
+        ->name('attendance.request.store');
 });
 
 Route::get(

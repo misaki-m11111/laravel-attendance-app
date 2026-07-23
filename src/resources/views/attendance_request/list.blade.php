@@ -61,10 +61,17 @@
                             </td>
 
                             <td>
-                                <a class="request-list__detail-link"
-                                    href="{{ route('attendance.detail', $attendanceRequest->attendance_id) }}">
-                                    詳細
-                                </a>
+                                @if ($isAdmin)
+                                    <a
+                                        href="{{ route('admin.attendance.request.show', $attendanceRequest->id) }}">
+                                        詳細
+                                    </a>
+                                @else
+                                    <a
+                                        href="{{ route('attendance.detail', $attendanceRequest->attendance_id) }}">
+                                        詳細
+                                    </a>
+                                @endif
                             </td>
                         </tr>
                     @empty

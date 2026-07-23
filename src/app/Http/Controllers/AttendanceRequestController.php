@@ -37,6 +37,7 @@ class AttendanceRequestController extends Controller
     }
     public function store(Request $request, string $id)
     {
+
         $attendance = Attendance::where('user_id', Auth::id())
             ->findOrFail($id);
 
