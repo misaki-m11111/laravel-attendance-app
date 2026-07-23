@@ -20,23 +20,38 @@ Route::post('/admin/logout', [AuthenticatedSessionController::class, 'destroy'])
     ->middleware(['auth:admin', 'fortify.admin'])
     ->name('admin.logout');
 
+
+
 Route::middleware('auth:admin')->group(function () {
     Route::get(
         '/admin/attendance/list',
         [AdminAttendanceController::class, 'index']
     )->name('admin.attendance.list');
 
-    Route::get('/admin/attendance/{id}', [AdminAttendanceController::class, 'show'])
-        ->where('attendance_correct_request_id', '[0-9]+')
+    Route::get(
+        '/admin/attendance/{id}',
+        [AdminAttendanceController::class, 'show']
+    )
+        ->where('id', '[0-9]+')
         ->name('admin.attendance.show');
 
-    Route::put('/admin/attendance/{id}', [AdminAttendanceController::class, 'update'])
-        ->where('attendance_correct_request_id', '[0-9]+')->name('admin.attendance.update');
+    Route::put(
+        '/admin/attendance/{id}',
+        [AdminAttendanceController::class, 'update']
+    )
+        ->where('id', '[0-9]+')
+        ->name('admin.attendance.update');
 
-    Route::get('/admin/staff/list', [AdminStaffController::class, 'index'])->name('admin.staff.list');
+    Route::get(
+        '/admin/staff/list',
+        [AdminStaffController::class, 'index']
+    )->name('admin.staff.list');
 
-    Route::get('/admin/attendance/staff/{id}', [AdminStaffController::class, 'show'])
-        ->where('attendance_correct_request_id', '[0-9]+')
+    Route::get(
+        '/admin/attendance/staff/{id}',
+        [AdminStaffController::class, 'show']
+    )
+        ->where('id', '[0-9]+')
         ->name('admin.staff.show');
 
     Route::get(
@@ -54,21 +69,35 @@ Route::middleware('auth:admin')->group(function () {
         ->name('admin.attendance.request.approve');
 });
 
+
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/attendance', [AttendanceController::class, 'index'])
-        ->name('attendance.index');
+    Route::get(
+        '/attendance',
+        [AttendanceController::class, 'index']
+    )->name('attendance.index');
 
-    Route::post('/attendance', [AttendanceController::class, 'store'])
-        ->name('attendance.store');
+    Route::post(
+        '/attendance',
+        [AttendanceController::class, 'store']
+    )->name('attendance.store');
 
-    Route::get('/attendance/list', [AttendanceController::class, 'monthlyList'])->name('attendance.list');
+    Route::get(
+        '/attendance/list',
+        [AttendanceController::class, 'monthlyList']
+    )->name('attendance.list');
 
-    Route::get('/attendance/detail/{id}', [AttendanceController::class, 'detail'])
-        ->where('attendance_correct_request_id', '[0-9]+')
+    Route::get(
+        '/attendance/detail/{id}',
+        [AttendanceController::class, 'detail']
+    )
+        ->where('id', '[0-9]+')
         ->name('attendance.detail');
 
-    Route::post('/attendance/detail/{id}', [AttendanceRequestController::class, 'store'])
-        ->where('attendance_correct_request_id', '[0-9]+')
+    Route::post(
+        '/attendance/detail/{id}',
+        [AttendanceRequestController::class, 'store']
+    )
+        ->where('id', '[0-9]+')
         ->name('attendance.request.store');
 });
 

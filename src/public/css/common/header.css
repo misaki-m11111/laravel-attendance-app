@@ -1,0 +1,52 @@
+.header {
+    width: 100%;
+    background-color: #000;
+}
+
+.header__inner {
+    max-width: 1230px;
+    height: 80px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header__logo img {
+    display: block;
+    width: 280px;
+    height: auto;
+}
+
+.header__nav {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+
+.header__nav a,
+.header__nav button {
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.header__nav form {
+    margin: 0;
+}
+
+.header__nav button {
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.header__nav a:hover,
+.header__nav button:hover {
+    opacity: 0.7;
+}
