@@ -15,9 +15,10 @@ class AdminSeeder extends Seeder
         DB::table('admins')->updateOrInsert(
             ['email' => 'user3@example.com'],
             [
-                'name' => '管理者ユーザー',
+                'name' => 'ユーザー3（管理者）',
                 'password' => Hash::make('password'),
                 'email_verified_at' => $now,
+                'admin_status' => true,
                 'created_at' => $now,
                 'updated_at' => $now,
             ]

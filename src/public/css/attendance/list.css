@@ -1,6 +1,6 @@
 .attendance-list {
     min-height: calc(100vh - 80px);
-    background-color: #f0eff2;
+    background-color: #F0EFFf;
     padding: 60px 0 80px;
 }
 
@@ -11,9 +11,10 @@
 }
 
 .attendance-list__title {
-    font-size: 24px;
+    width: 120px;
+    font-size: 30px;
     font-weight: 700;
-    border-left: 8px solid #000;
+    border-left: 8px solid #000000;
     padding-left: 16px;
     margin-bottom: 40px;
 }
@@ -22,36 +23,59 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #fff;
-    border-radius: 8px;
+    background-color: #FFFFFF;
+    border-radius: 10px;
     padding: 14px 24px;
-    margin-bottom: 32px;
+    margin-bottom: 21px;
 }
 
 .attendance-list__month-link {
-    color: #9a9a9a;
-    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #737373;
+    font-size: 16px;
     font-weight: 700;
+    line-height: 1;
     text-decoration: none;
+    white-space: nowrap;
+}
+
+.attendance-list__arrow-icon {
+    display: block;
+    width: 20px;
+    height: 14.78px;
+    object-fit: contain;
+    opacity: 0.3;
+}
+
+.attendance-list__arrow-icon--next {
+    transform: scaleX(-1);
 }
 
 .attendance-list__current-month {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 10px;
-    color: #000;
+    color: #000000;
     font-size: 18px;
     font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
 }
 
 .attendance-list__calendar-icon {
-    font-size: 18px;
+    display: block;
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
 }
 
 .attendance-list__table {
     width: 100%;
-    background-color: #fff;
-    border-radius: 8px;
+    background-color: #FFFFFF;
+    border-radius: 10px;
     border-collapse: separate;
     border-spacing: 0;
     overflow: hidden;
@@ -60,11 +84,12 @@
 .attendance-list__table th,
 .attendance-list__table td {
     padding: 14px 12px;
-    border-bottom: 1px solid #e1e1e1;
+    border-bottom: 2px solid #E1E1E1;
     color: #737373;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 700;
     text-align: center;
+    line-height: 1.5;
 }
 
 .attendance-list__table th {
@@ -76,11 +101,21 @@
 }
 
 .attendance-list__detail-link {
-    color: #000;
+    color: #000000;
     font-weight: 700;
+    line-height: 1.5;
     text-decoration: none;
+}
+
+.attendance-list__detail-link:visited {
+    color: #000000;
 }
 
 .attendance-list__detail-link:hover {
     opacity: 0.7;
+}
+
+.attendance-list__detail-link--disabled {
+    color: #737373;
+    pointer-events: none;
 }

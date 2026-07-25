@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AttendanceCorrectionRequest;
 use App\Models\Attendance;
 use App\Models\AttendanceRequest;
 use App\Models\AttendanceRequestBreak;
 use Carbon\Carbon;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class AttendanceRequestController extends Controller
 {
-
     public function index(Request $request)
     {
         $tab = $request->query('tab', 'pending');
@@ -35,8 +37,17 @@ class AttendanceRequestController extends Controller
 
         return view('attendance_request.list', compact('attendanceRequests', 'tab', 'isAdmin'));
     }
-    public function store(Request $request, string $id)
+
+    /**
+     * 修正申請を保存する。
+     *
+     * @param AttendanceCorrectionRequest $request
+     * @param int $id
+     * @return RedirectResponse
+     */
+    public function store(AttendanceCorrectionRequest $request, int $id): RedirectResponse
     {
+        $validated = $request->validated();
 
         $attendance = Attendance::where('user_id', Auth::id())
             ->findOrFail($id);
@@ -46,13 +57,13 @@ class AttendanceRequestController extends Controller
         $attendanceRequest = AttendanceRequest::create([
             'user_id' => Auth::id(),
             'attendance_id' => $attendance->id,
-            'requested_clock_in' => Carbon::parse($attendanceDate . ' ' . $request->clock_in),
-            'requested_clock_out' => Carbon::parse($attendanceDate . ' ' . $request->clock_out),
-            'reason' => $request->reason,
+            'requested_clock_in' => Carbon::parse($attendanceDate . ' ' . $validated['clock_in']),
+            'requested_clock_out' => Carbon::parse($attendanceDate . ' ' . $validated['clock_out']),
+            'reason' => $validated['reason'],
             'status' => 0,
         ]);
 
-        foreach ($request->breaks ?? [] as $break) {
+        foreach ($validated['breaks'] ?? [] as $break) {
             if (empty($break['break_start']) && empty($break['break_end'])) {
                 continue;
             }

@@ -36,16 +36,26 @@
                 <div class="attendance-detail__row">
                     <div class="attendance-detail__label">出勤・退勤</div>
 
-                    <div class="attendance-detail__value attendance-detail__time">
-                        <input type="text" name="clock_in"
-                            value="{{ $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') : '' }}"
-                            class="attendance-detail__input" {{ $pendingRequest ? 'readonly' : '' }}>
+                    <div class="attendance-detail__value">
+                        <div class="attendance-detail__time">
+                            <input type="text" name="clock_in"
+                                value="{{ old('clock_in', $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') : '') }}"
+                                class="attendance-detail__input" {{ $pendingRequest ? 'readonly' : '' }}>
 
-                        <span class="attendance-detail__separator">〜</span>
+                            <span class="attendance-detail__separator">〜</span>
 
-                        <input type="text" name="clock_out"
-                            value="{{ $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '' }}"
-                            class="attendance-detail__input" {{ $pendingRequest ? 'readonly' : '' }}>
+                            <input type="text" name="clock_out"
+                                value="{{ old('clock_out', $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '') }}"
+                                class="attendance-detail__input" {{ $pendingRequest ? 'readonly' : '' }}>
+                        </div>
+
+                        @error('clock_in')
+                            <p class="attendance-detail__error">{{ $message }}</p>
+                        @enderror
+
+                        @error('clock_out')
+                            <p class="attendance-detail__error">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
 
@@ -55,33 +65,59 @@
                             休憩{{ $index === 0 ? '' : $index + 1 }}
                         </div>
 
-                        <div class="attendance-detail__value attendance-detail__time">
-                            <input type="text" name="breaks[{{ $index }}][break_start]"
-                                value="{{ $breakTime->break_start ? \Carbon\Carbon::parse($breakTime->break_start)->format('H:i') : '' }}"
-                                class="attendance-detail__input" {{ $pendingRequest ? 'readonly' : '' }}>
+                        <div class="attendance-detail__value">
+                            <div class="attendance-detail__time">
+                                <input type="text" name="breaks[{{ $index }}][break_start]"
+                                    value="{{ old("breaks.$index.break_start", $breakTime->break_start ? \Carbon\Carbon::parse($breakTime->break_start)->format('H:i') : '') }}"
+                                    class="attendance-detail__input" {{ $pendingRequest ? 'readonly' : '' }}>
 
-                            <span class="attendance-detail__separator">〜</span>
+                                <span class="attendance-detail__separator">〜</span>
 
-                            <input type="text" name="breaks[{{ $index }}][break_end]"
-                                value="{{ $breakTime->break_end ? \Carbon\Carbon::parse($breakTime->break_end)->format('H:i') : '' }}"
-                                class="attendance-detail__input" {{ $pendingRequest ? 'readonly' : '' }}>
+                                <input type="text" name="breaks[{{ $index }}][break_end]"
+                                    value="{{ old("breaks.$index.break_end", $breakTime->break_end ? \Carbon\Carbon::parse($breakTime->break_end)->format('H:i') : '') }}"
+                                    class="attendance-detail__input" {{ $pendingRequest ? 'readonly' : '' }}>
+                            </div>
+
+                            @error("breaks.$index.break_start")
+                                <p class="attendance-detail__error">{{ $message }}</p>
+                            @enderror
+
+                            @error("breaks.$index.break_end")
+                                <p class="attendance-detail__error">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
                 @endforeach
 
+                @php
+                    $newBreakIndex = $attendance->breakTimes->count();
+                @endphp
+
                 <div class="attendance-detail__row">
                     <div class="attendance-detail__label">
-                        休憩{{ $attendance->breakTimes->count() + 1 }}
+                        休憩{{ $newBreakIndex === 0 ? '' : $newBreakIndex + 1 }}
                     </div>
 
-                    <div class="attendance-detail__value attendance-detail__time">
-                        <input type="text" name="breaks[{{ $attendance->breakTimes->count() }}][break_start]"
-                            value="" class="attendance-detail__input" {{ $pendingRequest ? 'readonly' : '' }}>
+                    <div class="attendance-detail__value">
+                        <div class="attendance-detail__time">
+                            <input type="text" name="breaks[{{ $newBreakIndex }}][break_start]"
+                                value="{{ old("breaks.$newBreakIndex.break_start") }}" class="attendance-detail__input"
+                                {{ $pendingRequest ? 'readonly' : '' }}>
 
-                        <span class="attendance-detail__separator">〜</span>
+                            <span class="attendance-detail__separator">〜</span>
 
-                        <input type="text" name="breaks[{{ $attendance->breakTimes->count() }}][break_end]"
-                            value="" class="attendance-detail__input" {{ $pendingRequest ? 'readonly' : '' }}>
+                            <input type="text" name="breaks[{{ $newBreakIndex }}][break_end]"
+                                value="{{ old("breaks.$newBreakIndex.break_end") }}" class="attendance-detail__input"
+                                {{ $pendingRequest ? 'readonly' : '' }}>
+                        </div>
+
+                        @error("breaks.$newBreakIndex.break_start")
+                            <p class="attendance-detail__error">{{ $message }}</p>
+                        @enderror
+
+                        @error("breaks.$newBreakIndex.break_end")
+                            <p class="attendance-detail__error">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
 
@@ -89,7 +125,11 @@
                     <div class="attendance-detail__label">備考</div>
 
                     <div class="attendance-detail__value">
-                        <textarea name="reason" class="attendance-detail__textarea" {{ $pendingRequest ? 'readonly' : '' }}></textarea>
+                        <textarea name="reason" class="attendance-detail__textarea" {{ $pendingRequest ? 'readonly' : '' }}>{{ old('reason', $pendingRequest ? $pendingRequest->reason : '') }}</textarea>
+
+                        @error('reason')
+                            <p class="attendance-detail__error">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
             </div>

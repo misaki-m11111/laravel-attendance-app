@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Attendance;
 use App\Models\BreakTime;
+use App\Models\AttendanceRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -96,7 +97,10 @@ class AttendanceController extends Controller
         return redirect()->route('attendance.index');
     }
 
-    public function monthlyList(Request $request)
+    /**
+     * ログイン中ユーザーの月次勤怠一覧を表示する。
+     */
+    public function monthlyList(Request $request): view
     {
         if ($request->input('month')) {
             $currentMonth = Carbon::parse($request->input('month') . '-01');
@@ -140,7 +144,13 @@ class AttendanceController extends Controller
         ));
     }
 
-    public function detail($id)
+    /**
+     * ログイン中ユーザーの勤怠詳細を表示する。
+     *
+     * @param int $id
+     * @return View
+     */
+    public function detail(int $id): View
     {
         $attendance = Attendance::with('breakTimes')
             ->where('user_id', Auth::id())
@@ -148,7 +158,7 @@ class AttendanceController extends Controller
 
         $user = Auth::user();
 
-        $pendingRequest = \App\Models\AttendanceRequest::where('attendance_id', $attendance->id)
+        $pendingRequest = AttendanceRequest::where('attendance_id', $attendance->id)
             ->where('user_id', Auth::id())
             ->where('status', 0)
             ->latest()

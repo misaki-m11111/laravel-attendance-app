@@ -9,16 +9,23 @@ use Illuminate\Notifications\Notifiable;
 
 class Admin extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory, Notifiable;
+  use HasFactory, Notifiable;
 
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+  protected $fillable = [
+    'name',
+    'email',
+    'password',
+    'email_verified_at',
+    'admin_status',
+  ];
 
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+  protected $hidden = [
+    'password',
+    'remember_token',
+  ];
+
+  protected $casts = [
+    'email_verified_at' => 'datetime',
+    'admin_status' => 'boolean',
+  ];
 }
