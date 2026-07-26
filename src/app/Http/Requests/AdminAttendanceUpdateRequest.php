@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AttendanceCorrectionRequest extends FormRequest
+class AdminAttendanceUpdateRequest extends FormRequest
 {
     public function authorize()
     {
@@ -43,7 +43,9 @@ class AttendanceCorrectionRequest extends FormRequest
                 'before_or_equal:clock_out',
             ],
 
-            'reason' => ['required'],
+            'remarks' => [
+                'required',
+            ],
         ];
     }
 
@@ -80,7 +82,8 @@ class AttendanceCorrectionRequest extends FormRequest
             'breaks.*.break_end.before_or_equal'
             => '休憩時間もしくは退勤時間が不適切な値です',
 
-            'reason.required' => '備考を記入してください',
+            'remarks.required'
+            => '備考を記入してください',
         ];
     }
 }

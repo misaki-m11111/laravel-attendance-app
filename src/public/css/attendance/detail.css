@@ -54,11 +54,23 @@ body {
 
 .attendance-detail__name {
     letter-spacing: 0.15em;
+    word-spacing: 0.6em;
 }
 
 .attendance-detail__date {
-    display: flex;
-    gap: 90px;
+    display: grid;
+    grid-template-columns: 103px 16px 103px;
+    column-gap: 45px;
+}
+
+.attendance-detail__date span:first-child {
+    grid-column: 1;
+    text-align: center;
+}
+
+.attendance-detail__date span:last-child {
+    grid-column: 3;
+    text-align: center;
 }
 
 .attendance-detail__time {

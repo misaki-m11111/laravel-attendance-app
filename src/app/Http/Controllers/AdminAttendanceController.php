@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Attendance;
 use App\Models\AttendanceRequest;
+use App\Http\Requests\AdminAttendanceUpdateRequest;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class AdminAttendanceController extends Controller
 {
@@ -31,9 +33,11 @@ class AdminAttendanceController extends Controller
         return view('admin.attendance.list', compact('attendances', 'selectedDate'));
     }
 
-    public function show(Request $request, string $id)
+    /**
+     * 管理者用の勤怠詳細画面を表示する。
+     */
+    public function show(string $id): View
     {
-
         $attendance = Attendance::with('user', 'breakTimes')->findOrFail($id);
 
         $hasPendingRequest = AttendanceRequest::where(
@@ -46,8 +50,15 @@ class AdminAttendanceController extends Controller
         return view('admin.attendance.detail', compact('attendance', 'hasPendingRequest'));
     }
 
-    public function update(Request $request, string $id)
-    {
+    /**
+     * 管理者が勤怠情報を更新する。
+     */
+    public function update(
+        AdminAttendanceUpdateRequest $request,
+        string $id
+    ): RedirectResponse {
+        $validated = $request->validated();
+
         $attendance = Attendance::findOrFail($id);
 
         $hasPendingRequest = AttendanceRequest::where(
@@ -61,28 +72,29 @@ class AdminAttendanceController extends Controller
             return redirect()
                 ->route('admin.attendance.show', $attendance->id);
         }
+
         $attendanceDate = Carbon::parse(
             $attendance->attendance_date
         )->toDateString();
 
-        DB::transaction(function () use ($request, $attendance, $attendanceDate) {
-            $attendance->clock_in = $request->filled('clock_in')
-                ? Carbon::parse(
-                    $attendanceDate . ' ' . $request->input('clock_in')
-                )
-                : null;
+        DB::transaction(function () use (
+            $validated,
+            $attendance,
+            $attendanceDate
+        ) {
+            $attendance->clock_in = Carbon::parse(
+                $attendanceDate . ' ' . $validated['clock_in']
+            );
 
-            $attendance->clock_out = $request->filled('clock_out')
-                ? Carbon::parse(
-                    $attendanceDate . ' ' . $request->input('clock_out')
-                )
-                : null;
+            $attendance->clock_out = Carbon::parse(
+                $attendanceDate . ' ' . $validated['clock_out']
+            );
 
-            $attendance->remarks = $request->input('remarks');
+            $attendance->remarks = $validated['remarks'];
 
             $attendance->save();
 
-            foreach ($request->input('breaks', []) as $breakData) {
+            foreach ($validated['breaks'] ?? [] as $breakData) {
                 $breakStart = !empty($breakData['break_start'])
                     ? Carbon::parse(
                         $attendanceDate . ' ' . $breakData['break_start']
