@@ -32,7 +32,7 @@
     border-radius: 10px;
     box-sizing: border-box;
 
-    background-color: #D9D9D9;
+    background-color: #d9d9d9;
     color: #000000;
 
     font-size: 24px;
@@ -44,7 +44,7 @@
 .verify-email__resend {
     border: none;
     background: none;
-    color: #0073CC;
+    color: #0073cc;
     font: 400;
     font-size: 14px;
     list-style: 1;

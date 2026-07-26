@@ -23,7 +23,6 @@
             </a>
         </div>
 
-        {{-- 申請一覧テーブル --}}
         <div class="request-list__table-wrapper">
             <table class="request-list__table">
                 <thead>
@@ -62,13 +61,13 @@
 
                             <td>
                                 @if ($isAdmin)
-                                    <a
-                                        href="{{ route('admin.attendance.request.show', $attendanceRequest->id) }}">
+                                    <a href="{{ route('admin.attendance.request.show', $attendanceRequest->id) }}"
+                                        class="request-list__detail-link">
                                         詳細
                                     </a>
                                 @else
                                     <a
-                                        href="{{ route('attendance.detail', $attendanceRequest->attendance_id) }}">
+                                        href="{{ route('attendance.detail', $attendanceRequest->attendance_id) }}"class="request-list__detail-link">
                                         詳細
                                     </a>
                                 @endif
