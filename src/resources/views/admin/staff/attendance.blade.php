@@ -19,16 +19,12 @@
                         'id' => $user->id,
                         'month' => $selectedMonth->copy()->subMonth()->format('Y-m'),
                     ]) }}">
-                    ← 前月
+                    <img class="staff-attendance__arrow-icon" src="{{ asset('images/arrow.png') }}" alt="">
+                    <span>前月</span>
                 </a>
 
                 <div class="staff-attendance__current-month">
-                    <svg class="staff-attendance__calendar-icon" viewBox="0 0 24 24" aria-hidden="true">
-                        <rect x="3" y="5" width="18" height="16" rx="2"></rect>
-                        <path d="M8 3v4M16 3v4M3 10h18"></path>
-                        <path d="M7 14h2M11 14h2M15 14h2M7 18h2M11 18h2M15 18h2"></path>
-                    </svg>
-
+                    <img class="staff-attendance__calendar-icon" src="{{ asset('images/calendar.png') }}" alt="">
                     <span>{{ $selectedMonth->format('Y/m') }}</span>
                 </div>
 
@@ -37,96 +33,98 @@
                         'id' => $user->id,
                         'month' => $selectedMonth->copy()->addMonth()->format('Y-m'),
                     ]) }}">
-                    翌月 →
+                    <span>翌月</span>
+                    <img class="staff-attendance__arrow-icon staff-attendance__arrow-icon--next"
+                        src="{{ asset('images/arrow.png') }}" alt="">
                 </a>
             </div>
 
-            <div class="staff-attendance__table-wrapper">
-                <table class="staff-attendance__table">
-                    <thead>
-                        <tr>
-                            <th>日付</th>
-                            <th>出勤</th>
-                            <th>退勤</th>
-                            <th>休憩</th>
-                            <th>合計</th>
-                            <th>詳細</th>
-                        </tr>
-                    </thead>
+            <table class="staff-attendance__table">
+                <thead>
+                    <tr>
+                        <th>日付</th>
+                        <th>出勤</th>
+                        <th>退勤</th>
+                        <th>休憩</th>
+                        <th>合計</th>
+                        <th>詳細</th>
+                    </tr>
+                </thead>
 
-                    <tbody>
-                        @foreach ($dates as $date)
-                            @php
-                                $attendance = $attendancesByDate->get($date->toDateString());
+                <tbody>
+                    @foreach ($dates as $date)
+                        @php
+                            $attendance = $attendancesByDate->get($date->toDateString());
 
-                                $weekDays = ['日', '月', '火', '水', '木', '金', '土'];
+                            $weekDays = ['日', '月', '火', '水', '木', '金', '土'];
 
-                                $breakMinutes = 0;
-                                $workMinutes = null;
+                            $breakMinutes = 0;
+                            $workMinutes = null;
 
-                                if ($attendance) {
-                                    foreach ($attendance->breakTimes as $breakTime) {
-                                        if ($breakTime->break_start && $breakTime->break_end) {
-                                            $breakMinutes += \Carbon\Carbon::parse(
-                                                $breakTime->break_start,
-                                            )->diffInMinutes(\Carbon\Carbon::parse($breakTime->break_end));
-                                        }
-                                    }
-
-                                    if ($attendance->clock_in && $attendance->clock_out) {
-                                        $workingMinutes = \Carbon\Carbon::parse($attendance->clock_in)->diffInMinutes(
-                                            \Carbon\Carbon::parse($attendance->clock_out),
+                            if ($attendance) {
+                                $breakMinutes = $attendance->breakTimes
+                                    ->filter(function ($breakTime) {
+                                        return $breakTime->break_start && $breakTime->break_end;
+                                    })
+                                    ->sum(function ($breakTime) {
+                                        return \Carbon\Carbon::parse($breakTime->break_start)->diffInMinutes(
+                                            \Carbon\Carbon::parse($breakTime->break_end),
                                         );
+                                    });
 
-                                        $workMinutes = max(0, $workingMinutes - $breakMinutes);
-                                    }
+                                if ($attendance->clock_in && $attendance->clock_out) {
+                                    $workingMinutes = \Carbon\Carbon::parse($attendance->clock_in)->diffInMinutes(
+                                        \Carbon\Carbon::parse($attendance->clock_out),
+                                    );
+
+                                    $workMinutes = max($workingMinutes - $breakMinutes, 0);
                                 }
+                            }
 
-                                $breakTimeText =
-                                    $breakMinutes > 0
-                                        ? sprintf('%d:%02d', intdiv($breakMinutes, 60), $breakMinutes % 60)
-                                        : '';
-
-                                $workTimeText = !is_null($workMinutes)
-                                    ? sprintf('%d:%02d', intdiv($workMinutes, 60), $workMinutes % 60)
+                            $breakTimeText =
+                                $breakMinutes > 0
+                                    ? sprintf('%d:%02d', intdiv($breakMinutes, 60), $breakMinutes % 60)
                                     : '';
-                            @endphp
 
-                            <tr>
-                                <td>
-                                    {{ $date->format('m/d') }}({{ $weekDays[$date->dayOfWeek] }})
-                                </td>
+                            $workTimeText = !is_null($workMinutes)
+                                ? sprintf('%d:%02d', intdiv($workMinutes, 60), $workMinutes % 60)
+                                : '';
+                        @endphp
 
-                                <td>
-                                    {{ $attendance && $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') : '' }}
-                                </td>
+                        <tr>
+                            <td>
+                                {{ $date->format('m/d') }}({{ $weekDays[$date->dayOfWeek] }})
+                            </td>
 
-                                <td>
-                                    {{ $attendance && $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '' }}
-                                </td>
+                            <td>
+                                {{ $attendance && $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') : '' }}
+                            </td>
 
-                                <td>{{ $breakTimeText }}</td>
+                            <td>
+                                {{ $attendance && $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '' }}
+                            </td>
 
-                                <td>{{ $workTimeText }}</td>
+                            <td>{{ $breakTimeText }}</td>
 
-                                <td>
-                                    @if ($attendance)
-                                        <a class="staff-attendance__detail-link"
-                                            href="{{ route('admin.attendance.show', $attendance->id) }}">
-                                            詳細
-                                        </a>
-                                    @else
-                                        <span class="staff-attendance__detail-link staff-attendance__detail-link--disabled"
-                                            aria-disabled="true">
-                                            詳細
-                                        </span>
-                                    @endif
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+                            <td>{{ $workTimeText }}</td>
+
+                            <td>
+                                @if ($attendance)
+                                    <a class="staff-attendance__detail-link"
+                                        href="{{ route('admin.attendance.show', $attendance->id) }}">
+                                        詳細
+                                    </a>
+                                @else
+                                    <span class="staff-attendance__detail-link staff-attendance__detail-link--disabled"
+                                        aria-disabled="true">
+                                        詳細
+                                    </span>
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </main>
 @endsection

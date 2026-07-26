@@ -7,18 +7,24 @@ use App\Models\Attendance;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class AdminStaffController extends Controller
 {
-    public function index()
+    /**
+     * スタッフ一覧画面を表示する。
+     */
+    public function index(): View
     {
 
         $users = User::all();
 
         return view('admin.staff.list', compact('users'));
     }
-
-    public function show(Request $request, string $id)
+    /**
+     * 対象スタッフの月次勤怠一覧画面を表示する。
+     */
+    public function show(Request $request, string $id): View
     {
         $user = User::findOrFail($id);
 

@@ -25,14 +25,10 @@
                         @foreach ($users as $user)
                             <tr>
                                 <td>{{ $user->name }}</td>
-
                                 <td>{{ $user->email }}</td>
 
                                 <td>
-                                    <a
-                                        class="staff-list__detail-link"
-                                        href="{{ route('admin.staff.show', $user->id) }}"
-                                    >
+                                    <a class="staff-list__detail-link" href="{{ route('admin.staff.show', $user->id) }}">
                                         詳細
                                     </a>
                                 </td>

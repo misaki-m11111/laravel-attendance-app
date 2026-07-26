@@ -1,7 +1,7 @@
 .staff-list {
     min-height: calc(100vh - 80px);
     padding: 70px 20px;
-    background-color: #f1f1f4;
+    background-color: #f0eff2;
 }
 
 .staff-list__inner {
@@ -13,17 +13,16 @@
 .staff-list__title {
     margin: 0 0 60px;
     padding-left: 16px;
-    border-left: 7px solid #000;
-    color: #000;
-    font-size: 24px;
+    border-left: 8px solid #000000;
+    color: #000000;
+    font-size: 30px;
     font-weight: 700;
-    line-height: 1.2;
 }
 
 .staff-list__table-wrapper {
     overflow: hidden;
-    background-color: #fff;
-    border-radius: 8px;
+    background-color: #ffffff;
+    border-radius: 10px;
 }
 
 .staff-list__table {
@@ -34,24 +33,23 @@
 
 .staff-list__table th,
 .staff-list__table td {
-    padding: 14px 20px;
-    border-bottom: 1px solid #ddd;
+    padding: 14px 60px;
+    color: #737373;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.5;
+    letter-spacing: 0.07em;
     text-align: center;
     vertical-align: middle;
+    white-space: nowrap;
 }
 
 .staff-list__table th {
-    color: #737373;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
+    border-bottom: 3px solid #e1e1e1;
 }
 
 .staff-list__table td {
-    color: #737373;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
+    border-bottom: 2px solid #e1e1e1;
 }
 
 .staff-list__table th:nth-child(1),
@@ -74,9 +72,15 @@
 }
 
 .staff-list__detail-link {
-    color: #000;
+    color: #000000;
+    font-size: 16px;
     font-weight: 700;
+    letter-spacing: 0.07em;
     text-decoration: none;
+}
+
+.staff-list__detail-link:visited {
+    color: #000000;
 }
 
 .staff-list__detail-link:hover {
