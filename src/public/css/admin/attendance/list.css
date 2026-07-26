@@ -1,128 +1,105 @@
-body {
-    margin: 0;
-    background: #f0eff2;
-    color: #333;
-}
-
-.admin-attendance {
-    width: min(760px, calc(100% - 40px));
+.attendance-list {
     min-height: calc(100vh - 80px);
+    padding: 60px 0 80px;
+    background-color: #f0efff;
+}
+
+.attendance-list__inner {
+    width: 70%;
+    max-width: 900px;
     margin: 0 auto;
-    padding: 60px 0 120px;
 }
 
-.admin-attendance__title {
-    display: flex;
-    align-items: center;
-    margin: 0;
-    font-size: 26px;
+.attendance-list__title {
+    margin-bottom: 40px;
+    padding-left: 16px;
+    border-left: 8px solid #000000;
+    font-size: 30px;
     font-weight: 700;
-    line-height: 1.4;
 }
 
-.admin-attendance__title::before {
-    width: 7px;
-    height: 34px;
-    margin-right: 16px;
-    background: #000;
-    content: "";
+.attendance-list__title--daily {
+    width: auto;
 }
 
-.date-switcher {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-    min-height: 52px;
-    margin-top: 32px;
-    padding: 0 20px;
-    background: #fff;
-    border-radius: 8px;
-}
-
-.date-switcher__link {
+.attendance-list__date-nav {
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 21px;
+    padding: 14px 24px;
+    background-color: #ffffff;
+    border-radius: 10px;
+}
+
+.attendance-list__date-link {
+    display: flex;
+    align-items: center;
     gap: 8px;
-    align-items: center;
-    color: #777;
-    font-size: 14px;
-    font-weight: 600;
-    text-decoration: none;
-}
-
-.date-switcher__link:hover {
-    color: #000;
-}
-
-.date-switcher__link--previous {
-    justify-self: start;
-}
-
-.date-switcher__link--next {
-    justify-self: end;
-}
-
-.date-switcher__link span {
-    color: #aaa;
-    font-size: 22px;
-    line-height: 1;
-}
-
-.date-switcher__form {
-    margin: 0;
-}
-
-.date-switcher__picker {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-}
-
-.date-switcher__calendar {
-    position: relative;
-    width: 16px;
-    height: 15px;
-    border: 2px solid #555;
-    border-radius: 2px;
-    box-sizing: border-box;
-}
-
-.date-switcher__calendar::before {
-    position: absolute;
-    top: 3px;
-    left: 0;
-    width: 100%;
-    border-top: 2px solid #555;
-    content: "";
-}
-
-.date-switcher__calendar::after {
-    position: absolute;
-    top: -4px;
-    left: 2px;
-    width: 8px;
-    height: 3px;
-    border-right: 2px solid #555;
-    border-left: 2px solid #555;
-    content: "";
-}
-
-.date-switcher__input {
-    position: relative;
-    width: 120px;
-    padding: 4px 0;
-    border: none;
-    outline: none;
-    background: transparent;
-    color: #111;
-    font-family: inherit;
+    color: #737373;
     font-size: 16px;
     font-weight: 700;
+    line-height: 1;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.attendance-list__date-link:hover {
+    opacity: 0.7;
+}
+
+.attendance-list__arrow-icon {
+    display: block;
+    width: 20px;
+    height: 14.78px;
+    object-fit: contain;
+    opacity: 0.3;
+}
+
+.attendance-list__arrow-icon--next {
+    transform: scaleX(-1);
+}
+
+.attendance-list__date-form {
+    margin: 0;
+}
+
+.attendance-list__current-date {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: #000000;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.attendance-list__calendar-icon {
+    display: block;
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+}
+
+.attendance-list__date-input {
+    position: relative;
+    width: 125px;
+    padding: 0;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    color: #000000;
+    font-family: inherit;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1;
     cursor: pointer;
 }
 
-.date-switcher__input::-webkit-calendar-picker-indicator {
+.attendance-list__date-input::-webkit-calendar-picker-indicator {
     position: absolute;
     inset: 0;
     width: 100%;
@@ -131,50 +108,50 @@ body {
     cursor: pointer;
 }
 
-.attendance-table-wrapper {
-    margin-top: 32px;
-    overflow: hidden;
-    background: #fff;
-    border-radius: 8px;
-}
-
-.attendance-table {
+.attendance-list__table {
     width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed;
+    overflow: hidden;
+    border-collapse: separate;
+    border-spacing: 0;
+    background-color: #ffffff;
+    border-radius: 10px;
 }
 
-.attendance-table th,
-.attendance-table td {
-    padding: 14px 10px;
-    color: #666;
-    font-size: 14px;
-    text-align: center;
-    vertical-align: middle;
-}
-
-.attendance-table th {
-    font-weight: 600;
-}
-
-.attendance-table tbody tr {
-    border-top: 1px solid #ddd;
-}
-
-.attendance-table__name {
-    letter-spacing: 0.08em;
-}
-
-.attendance-table__detail {
-    color: #111;
+.attendance-list__table th,
+.attendance-list__table td {
+    padding: 14px 12px;
+    border-bottom: 2px solid #e1e1e1;
+    color: #737373;
+    font-size: 16px;
     font-weight: 700;
+    line-height: 1.5;
+    text-align: center;
+}
+
+.attendance-list__table th {
+    color: #737373;
+}
+
+.attendance-list__table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.attendance-list__detail-link {
+    color: #000000;
+    font-weight: 700;
+    line-height: 1.5;
     text-decoration: none;
 }
 
-.attendance-table__detail:hover {
-    text-decoration: underline;
+.attendance-list__detail-link:visited {
+    color: #000000;
 }
 
-.attendance-table__empty {
-    height: 80px;
+.attendance-list__detail-link:hover {
+    opacity: 0.7;
+}
+
+.attendance-list__empty {
+    padding: 30px 12px !important;
+    text-align: center;
 }

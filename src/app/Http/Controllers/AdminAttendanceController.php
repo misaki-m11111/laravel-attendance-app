@@ -7,10 +7,14 @@ use App\Models\AttendanceRequest;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
 class AdminAttendanceController extends Controller
 {
-    public function index(Request $request)
+    /**
+     * 勤怠一覧画面を表示する。
+     */
+    public function index(Request $request): View
     {
         $request->validate([
             'date' => ['nullable', 'date_format:Y-m-d'],
@@ -20,8 +24,8 @@ class AdminAttendanceController extends Controller
             $request->input('date', now()->toDateString())
         );
 
-        $attendances = Attendance::with(['user', 'breaktimes'])
-            ->where('attendance_date', $selectedDate->toDateString())
+        $attendances = Attendance::with(['user', 'breakTimes'])
+            ->whereDate('attendance_date', $selectedDate->toDateString())
             ->get();
 
         return view('admin.attendance.list', compact('attendances', 'selectedDate'));

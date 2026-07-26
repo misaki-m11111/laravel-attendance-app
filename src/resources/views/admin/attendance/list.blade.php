@@ -7,40 +7,42 @@
 @endsection
 
 @section('content')
-    <main class="admin-attendance">
-        <h1 class="admin-attendance__title">
-            {{ $selectedDate->format('Y年n月j日') }}の勤怠
-        </h1>
+    <main class="attendance-list">
+        <div class="attendance-list__inner">
+            <h1 class="attendance-list__title attendance-list__title--daily">
+                {{ $selectedDate->format('Y年n月j日') }}の勤怠
+            </h1>
 
-        <div class="date-switcher">
-            <a class="date-switcher__link date-switcher__link--previous"
-                href="{{ route('admin.attendance.list', [
-                    'date' => $selectedDate->copy()->subDay()->toDateString(),
-                ]) }}">
-                <span aria-hidden="true">←</span>
-                前日
-            </a>
+            <div class="attendance-list__date-nav">
+                <a class="attendance-list__date-link"
+                    href="{{ route('admin.attendance.list', [
+                        'date' => $selectedDate->copy()->subDay()->toDateString(),
+                    ]) }}">
+                    <img class="attendance-list__arrow-icon attendance-list__arrow-icon--prev"
+                        src="{{ asset('images/arrow.png') }}" alt="">
+                    <span>前日</span>
+                </a>
 
-            <form class="date-switcher__form" method="GET" action="{{ route('admin.attendance.list') }}">
-                <label class="date-switcher__picker">
-                    <span class="date-switcher__calendar" aria-hidden="true"></span>
+                <form class="attendance-list__date-form" method="GET" action="{{ route('admin.attendance.list') }}">
+                    <label class="attendance-list__current-date">
+                        <img class="attendance-list__calendar-icon" src="{{ asset('images/calendar.png') }}" alt="">
 
-                    <input class="date-switcher__input" type="date" name="date"
-                        value="{{ $selectedDate->toDateString() }}" aria-label="表示する日付" onchange="this.form.submit()">
-                </label>
-            </form>
+                        <input class="attendance-list__date-input" type="date" name="date"
+                            value="{{ $selectedDate->toDateString() }}" aria-label="表示する日付" onchange="this.form.submit()">
+                    </label>
+                </form>
 
-            <a class="date-switcher__link date-switcher__link--next"
-                href="{{ route('admin.attendance.list', [
-                    'date' => $selectedDate->copy()->addDay()->toDateString(),
-                ]) }}">
-                翌日
-                <span aria-hidden="true">→</span>
-            </a>
-        </div>
+                <a class="attendance-list__date-link"
+                    href="{{ route('admin.attendance.list', [
+                        'date' => $selectedDate->copy()->addDay()->toDateString(),
+                    ]) }}">
+                    <span>翌日</span>
+                    <img class="attendance-list__arrow-icon attendance-list__arrow-icon--next"
+                        src="{{ asset('images/arrow.png') }}" alt="">
+                </a>
+            </div>
 
-        <div class="attendance-table-wrapper">
-            <table class="attendance-table">
+            <table class="attendance-list__table">
                 <thead>
                     <tr>
                         <th>名前</th>
@@ -55,17 +57,20 @@
                 <tbody>
                     @forelse ($attendances as $attendance)
                         @php
-                            $breakMinutes = 0;
-
-                            foreach ($attendance->breakTimes as $breakTime) {
-                                if ($breakTime->break_start && $breakTime->break_end) {
-                                    $breakMinutes += \Carbon\Carbon::parse($breakTime->break_start)->diffInMinutes(
+                            $breakMinutes = $attendance->breakTimes
+                                ->filter(function ($breakTime) {
+                                    return $breakTime->break_start && $breakTime->break_end;
+                                })
+                                ->sum(function ($breakTime) {
+                                    return \Carbon\Carbon::parse($breakTime->break_start)->diffInMinutes(
                                         \Carbon\Carbon::parse($breakTime->break_end),
                                     );
-                                }
-                            }
+                                });
 
-                            $formattedBreakTime = sprintf('%d:%02d', intdiv($breakMinutes, 60), $breakMinutes % 60);
+                            $formattedBreakTime =
+                                $breakMinutes > 0
+                                    ? sprintf('%d:%02d', intdiv($breakMinutes, 60), $breakMinutes % 60)
+                                    : '';
 
                             $formattedWorkTime = '';
 
@@ -81,7 +86,7 @@
                         @endphp
 
                         <tr>
-                            <td class="attendance-table__name">
+                            <td>
                                 {{ $attendance->user->name }}
                             </td>
 
@@ -102,14 +107,15 @@
                             </td>
 
                             <td>
-                                <a href="{{ route('admin.attendance.show', $attendance->id) }}">
+                                <a class="attendance-list__detail-link"
+                                    href="{{ route('admin.attendance.show', $attendance->id) }}">
                                     詳細
                                 </a>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td class="attendance-table__empty" colspan="6">
+                            <td class="attendance-list__empty" colspan="6">
                                 勤怠情報がありません
                             </td>
                         </tr>
