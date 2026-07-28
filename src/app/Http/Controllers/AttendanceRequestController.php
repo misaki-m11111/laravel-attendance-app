@@ -15,15 +15,15 @@ use Illuminate\View\View;
 class AttendanceRequestController extends Controller
 {
 
-/**
- * ログイン中の利用者に応じた申請一覧を表示する。
- *
- * 管理者には全ユーザーの申請を表示し、
- * 一般ユーザーには本人の申請のみ表示する。
- *
- * @param Request $request
- * @return View
- */
+    /**
+     * ログイン中の利用者に応じた申請一覧を表示する。
+     *
+     * 管理者には全ユーザーの申請を表示し、
+     * 一般ユーザーには本人の申請のみ表示する。
+     *
+     * @param Request $request
+     * @return View
+     */
     public function index(Request $request): View
     {
         $tab = $request->query('tab', 'pending');

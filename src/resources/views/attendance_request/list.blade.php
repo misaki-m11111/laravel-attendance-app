@@ -10,7 +10,6 @@
     <div class="request-list">
         <h1 class="request-list__title">申請一覧</h1>
 
-        {{-- 承認待ち・承認済みタブ --}}
         <div class="request-list__tabs">
             <a href="{{ route('attendance.request.index', ['tab' => 'pending']) }}"
                 class="request-list__tab {{ $tab === 'pending' ? 'request-list__tab--active' : '' }}">

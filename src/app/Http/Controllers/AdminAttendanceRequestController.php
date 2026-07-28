@@ -4,10 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\AttendanceRequest;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class AdminAttendanceRequestController extends Controller
 {
-    public function show(string $attendance_correct_request_id)
+    /**
+     * 管理者用の勤怠修正申請詳細画面を表示する。
+     */
+    public function show(string $attendance_correct_request_id): View
     {
         $attendanceRequest = AttendanceRequest::with([
             'user',
@@ -18,7 +23,13 @@ class AdminAttendanceRequestController extends Controller
         return view('admin.attendance_request.show', compact('attendanceRequest'));
     }
 
-    public function approve(string $attendance_correct_request_id)
+    /**
+     * 承認待ちの勤怠修正申請を承認する。
+     *
+     * @param string $attendance_correct_request_id
+     * @return RedirectResponse
+     */
+    public function approve(string $attendance_correct_request_id): RedirectResponse
     {
         $approved = DB::transaction(function () use (
             $attendance_correct_request_id
