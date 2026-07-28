@@ -171,7 +171,7 @@ docker compose ps
 ## ER図
 
 ```html
-<img width="1200" alt="attendance-app-er" src="src/app/docs/er/attendance-app.er.png">
+<img width="1200" alt="attendance-app-er" src="docs/er/attendance-app.er.png">
 ```
 
 ## テーブル設計
