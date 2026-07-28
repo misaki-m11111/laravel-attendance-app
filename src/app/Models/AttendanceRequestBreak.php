@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AttendanceRequestBreak extends Model
 {
@@ -15,7 +16,12 @@ class AttendanceRequestBreak extends Model
         'requested_break_end',
     ];
 
-    public function attendanceRequest()
+    /**
+     * この休憩時間の修正内容が属する勤怠修正申請を取得する。
+     *
+     * @return BelongsTo
+     */
+    public function attendanceRequest(): BelongsTo
     {
         return $this->belongsTo(AttendanceRequest::class);
     }
