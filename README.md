@@ -170,9 +170,7 @@ docker compose ps
 
 ## ER図
 
-```html
-<img src="docs/images/er-diagram.png" alt="ER図" width="100%">
-```
+![ER図](src/app/docs/er/attendance-app.er.png)
 
 ## テーブル設計
 
