@@ -170,10 +170,8 @@ docker compose ps
 
 ## ER図
 
-<!-- ER図をGitHubへアップロード後、画像URLを設定してください -->
-
 ```html
-<img width="1200" alt="attendance-app-er" src="ER図の画像URL">
+<img width="1200" alt="attendance-app-er" src="src/app/docs/er/attendance-app.er.png">
 ```
 
 ## テーブル設計
