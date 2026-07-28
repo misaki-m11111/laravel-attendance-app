@@ -170,7 +170,7 @@ docker compose ps
 
 ## ER図
 
-![ER図](src/app/docs/er/attendance-app.er.png)
+
 
 ## テーブル設計
 
