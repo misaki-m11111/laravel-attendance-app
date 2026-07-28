@@ -170,6 +170,7 @@ docker compose ps
 
 ## ER図
 
+<img width="1000" alt="attendance-app er" src="https://github.com/user-attachments/assets/8b68b44d-9dea-4abb-8112-91dd768e7565" />
 
 
 ## テーブル設計
