@@ -4,7 +4,7 @@
 
 一般ユーザーの出勤・退勤・休憩登録や勤怠確認、勤怠修正申請ができる勤怠管理アプリです。
 
-管理者は、スタッフの勤怠確認、勤怠情報の修正、修正申請の承認を行えます。
+管理者は、スタッフの勤怠確認、勤怠情報の修正、修正申請の承認、月次勤怠のCSV出力を行えます。
 
 ## 機能一覧
 
@@ -33,6 +33,7 @@
 * 勤怠情報の修正
 * スタッフ一覧表示
 * スタッフ別月次勤怠一覧表示
+* スタッフ別月次勤怠のCSV出力
 * 修正申請一覧表示
 * 修正申請詳細表示
 * 修正申請の承認
@@ -131,6 +132,12 @@ php artisan db:seed
 php artisan optimize:clear
 ```
 
+データベースを初期化し、すべてのダミーデータを入れ直す場合は、次を実行してください。
+
+```bash
+php artisan migrate:fresh --seed
+```
+
 ## メール認証
 
 本アプリでは、一般ユーザーの新規会員登録時にMailHogを使用してメール認証を行います。
@@ -167,11 +174,9 @@ docker compose ps
 | Docker          | Docker Compose |
 | MailHog         | メール認証確認用       |
 
-
 ## ER図
 
 <img width="1000" alt="attendance-app er" src="https://github.com/user-attachments/assets/8b68b44d-9dea-4abb-8112-91dd768e7565" />
-
 
 ## テーブル設計
 
@@ -179,15 +184,15 @@ docker compose ps
 
 一般ユーザーの認証情報を管理します。
 
-| カラム名              | 型         | 制約                | 説明          |
-| ----------------- | --------- | ----------------- | ----------- |
-| id                | bigint    | primary key       | ユーザーID      |
-| name              | string    | not null          | ユーザー名       |
-| email             | string    | not null / unique | メールアドレス     |
-| email_verified_at | timestamp | nullable          | メール認証日時     |
-| password          | string    | not null          | パスワード       |
-| created_at        | timestamp | nullable          | 作成日時        |
-| updated_at        | timestamp | nullable          | 更新日時        |
+| カラム名              | 型         | 制約                | 説明      |
+| ----------------- | --------- | ----------------- | ------- |
+| id                | bigint    | primary key       | ユーザーID  |
+| name              | string    | not null          | ユーザー名   |
+| email             | string    | not null / unique | メールアドレス |
+| email_verified_at | timestamp | nullable          | メール認証日時 |
+| password          | string    | not null          | パスワード   |
+| created_at        | timestamp | nullable          | 作成日時    |
+| updated_at        | timestamp | nullable          | 更新日時    |
 
 ---
 
@@ -195,16 +200,16 @@ docker compose ps
 
 管理者の認証情報を管理します。
 
-| カラム名              | 型         | 制約                | 説明          |
-| ----------------- | --------- | ----------------- | ----------- |
-| id                | bigint    | primary key       | 管理者ID       |
-| name              | string    | not null          | 管理者名        |
-| email             | string    | not null / unique | メールアドレス     |
-| email_verified_at | timestamp | nullable          | メール認証日時     |
-| password          | string    | not null          | パスワード       |
-| admin_status      | boolean   | default true      | 管理者を表す値     |
-| created_at        | timestamp | nullable          | 作成日時        |
-| updated_at        | timestamp | nullable          | 更新日時        |
+| カラム名              | 型         | 制約                | 説明      |
+| ----------------- | --------- | ----------------- | ------- |
+| id                | bigint    | primary key       | 管理者ID   |
+| name              | string    | not null          | 管理者名    |
+| email             | string    | not null / unique | メールアドレス |
+| email_verified_at | timestamp | nullable          | メール認証日時 |
+| password          | string    | not null          | パスワード   |
+| admin_status      | boolean   | default true      | 管理者を表す値 |
+| created_at        | timestamp | nullable          | 作成日時    |
+| updated_at        | timestamp | nullable          | 更新日時    |
 
 ---
 
@@ -223,6 +228,8 @@ docker compose ps
 | remarks         | text      | nullable    | 確定した勤怠の備考 |
 | created_at      | timestamp | nullable    | 作成日時      |
 | updated_at      | timestamp | nullable    | 更新日時      |
+
+`user_id`と`attendance_date`の組み合わせには、複合UNIQUE制約を設定しています。
 
 `status`には、勤務状態に応じて以下の値を保存します。
 
@@ -256,17 +263,17 @@ docker compose ps
 
 一般ユーザーから送信された勤怠修正申請を管理します。
 
-| カラム名                | 型           | 制約          | 説明         |
-| ------------------- | ----------- | ----------- | ---------- |
-| id                  | bigint      | primary key | 修正申請ID     |
-| user_id             | bigint      | foreign key | 申請したユーザーID |
-| attendance_id       | bigint      | foreign key | 修正対象の勤怠ID  |
-| requested_clock_in  | time        | not null    | 申請後の出勤時刻   |
-| requested_clock_out | time        | not null    | 申請後の退勤時刻   |
-| reason              | text        | not null    | 修正申請理由     |
-| status              | tinyint     | default 0   | 承認状態       |
-| created_at          | timestamp   | nullable    | 申請日時       |
-| updated_at          | timestamp   | nullable    | 更新日時       |
+| カラム名                | 型         | 制約          | 説明         |
+| ------------------- | --------- | ----------- | ---------- |
+| id                  | bigint    | primary key | 修正申請ID     |
+| user_id             | bigint    | foreign key | 申請したユーザーID |
+| attendance_id       | bigint    | foreign key | 修正対象の勤怠ID  |
+| requested_clock_in  | time      | not null    | 申請後の出勤時刻   |
+| requested_clock_out | time      | not null    | 申請後の退勤時刻   |
+| reason              | text      | not null    | 修正申請理由     |
+| status              | tinyint   | default 0   | 承認状態       |
+| created_at          | timestamp | nullable    | 申請日時       |
+| updated_at          | timestamp | nullable    | 更新日時       |
 
 `status`には以下の値を使用します。
 
@@ -300,6 +307,8 @@ docker compose ps
 | attendances         | attendance_requests       | 1対多 |
 | attendance_requests | attendance_request_breaks | 1対多 |
 
+`admins`テーブルは、他のテーブルへの外部キーを持たない独立したテーブルです。
+
 ## URL
 
 ### 一般ユーザー
@@ -323,6 +332,7 @@ docker compose ps
 | 勤怠詳細ページ        | `/admin/attendance/{id}`                 |
 | スタッフ一覧ページ      | `/admin/staff/list`                      |
 | スタッフ別月次勤怠一覧ページ | `/admin/attendance/staff/{id}`           |
+| スタッフ別月次勤怠CSV出力 | `/admin/attendance/staff/{id}/csv`       |
 | 修正申請一覧ページ      | `/stamp_correction_request/list`         |
 | 修正申請詳細・承認ページ   | `/stamp_correction_request/approve/{id}` |
 
@@ -359,6 +369,60 @@ password: password
 
 Seederで作成されるユーザーと管理者は、メール認証済みです。
 
+## 意図的データの投入
+
+応用要件の確認用として、`user1@example.com`へ2026年2月から2026年7月までの勤怠データを登録しています。
+
+対象Seeder：
+
+```text
+database/seeders/User1IntentionalAttendanceSeeder.php
+```
+
+### 登録件数
+
+| 対象月     |  件数 |
+| ------- | --: |
+| 2026年2月 | 15件 |
+| 2026年3月 | 15件 |
+| 2026年4月 | 15件 |
+| 2026年5月 | 15件 |
+| 2026年6月 | 15件 |
+| 2026年7月 | 17件 |
+| 合計      | 92件 |
+
+2026年2月から6月までは、各月の平日から15日分を登録しています。
+
+```text
+出勤：09:00
+退勤：18:00
+休憩：12:00〜13:00
+状態：退勤済
+```
+
+2026年7月は、以下の勤務パターンを登録しています。
+
+| 勤務パターン |    出勤 |    退勤 |  件数 |
+| ------ | ----: | ----: | --: |
+| 通常勤務   | 09:00 | 18:00 | 10件 |
+| 残業     | 09:00 | 20:00 |  3件 |
+| 遅刻     | 09:30 | 18:00 |  2件 |
+| 早退     | 09:00 | 17:00 |  1件 |
+| 長時間勤務  | 08:00 | 21:00 |  1件 |
+| 合計     |       |       | 17件 |
+
+すべての勤怠に、次の休憩を1件登録しています。
+
+```text
+12:00〜13:00
+```
+
+意図的データを含めて初期化する場合は、次を実行してください。
+
+```bash
+php artisan migrate:fresh --seed
+```
+
 ## 管理者認証について
 
 一般ユーザーと管理者では、認証に使用するテーブルとGuard（ガード）を分けています。
@@ -378,6 +442,180 @@ admin Guard
 要件の管理者ダミーデータに合わせるため、`admins`テーブルに`admin_status`カラムを追加しています。
 
 現在の管理者認証は、`admin_status`ではなく、`admin` Guardと`admins`テーブルを使用して判定しています。
+
+## PHPUnitテスト
+
+本アプリでは、PHPUnitを使用してFeatureテストを実装しています。
+
+### テスト環境
+
+テスト用の環境設定として、以下のファイルを使用します。
+
+```text
+src/.env.testing
+```
+
+主な設定：
+
+```env
+APP_ENV=testing
+
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=attendance_test
+DB_USERNAME=laravel_user
+DB_PASSWORD=laravel_pass
+```
+
+テストでは`RefreshDatabase`を使用しています。
+
+`RefreshDatabase`は、各テストの実行前後にデータベースを初期状態へ戻し、他のテストデータの影響を受けにくくする仕組みです。
+
+テスト内では必要なデータを個別に作成するため、通常のSeederは使用しません。
+
+### テスト用データベースの作成
+
+プロジェクトのルートディレクトリで、MySQLコンテナへ入ります。
+
+```bash
+docker compose exec mysql bash
+```
+
+MySQLへログインします。
+
+```bash
+mysql -u root -p
+```
+
+テスト用データベースを作成します。
+
+```sql
+CREATE DATABASE attendance_test;
+exit;
+```
+
+### テスト環境の準備
+
+PHPコンテナ内で、テスト環境用のアプリケーションキーを作成します。
+
+```bash
+docker compose exec php bash
+php artisan key:generate --env=testing
+php artisan config:clear
+```
+
+必要に応じて、テスト用データベースへマイグレーションを実行します。
+
+```bash
+php artisan migrate --env=testing
+```
+
+### テスト実行方法
+
+PHPコンテナ内で実行する場合：
+
+```bash
+php artisan test
+```
+
+ホスト側から実行する場合：
+
+```bash
+docker compose exec php php artisan test
+```
+
+### テスト内容
+
+#### 認証機能
+
+対象：
+
+```text
+tests/Feature/Auth/UserRegistrationTest.php
+tests/Feature/Auth/UserLoginTest.php
+tests/Feature/Auth/AdminLoginTest.php
+tests/Feature/Auth/EmailVerificationTest.php
+```
+
+主な確認項目：
+
+* 会員登録のバリデーション
+* 正常な会員登録
+* 一般ユーザーのログイン
+* 管理者のログイン
+* 認証メールの送信
+* メール認証リンクの表示
+* メール認証後の画面遷移
+
+#### 一般ユーザー勤怠機能
+
+対象：
+
+```text
+tests/Feature/Attendance/AttendanceDateTest.php
+tests/Feature/Attendance/AttendanceStatusTest.php
+tests/Feature/Attendance/ClockInTest.php
+tests/Feature/Attendance/ClockOutTest.php
+tests/Feature/Attendance/BreakTest.php
+tests/Feature/Attendance/UserAttendanceListTest.php
+tests/Feature/Attendance/UserAttendanceDetailTest.php
+tests/Feature/Attendance/UserAttendanceRequestTest.php
+```
+
+主な確認項目：
+
+* 現在日時の表示
+* 勤務状態の表示
+* 出勤処理
+* 退勤処理
+* 休憩開始・休憩終了
+* 1日に複数回の休憩
+* 休憩合計時間
+* 月次勤怠一覧
+* 前月・翌月への移動
+* 勤怠詳細表示
+* 修正申請のバリデーション
+* 修正申請の保存
+* 承認待ち・承認済み申請一覧
+* 承認待ち中の編集制限
+
+#### 管理者機能
+
+対象：
+
+```text
+tests/Feature/Admin/AdminAttendanceListTest.php
+tests/Feature/Admin/AdminAttendanceDetailTest.php
+tests/Feature/Admin/AdminStaffTest.php
+tests/Feature/Admin/AdminAttendanceRequestTest.php
+```
+
+主な確認項目：
+
+* 指定日の全ユーザー勤怠一覧
+* 前日・翌日の表示
+* 管理者用勤怠詳細
+* 管理者による勤怠修正
+* 管理者用バリデーション
+* スタッフ一覧
+* スタッフ別月次勤怠
+* 勤怠詳細への遷移
+* 承認待ち申請一覧
+* 承認済み申請一覧
+* 修正申請の承認
+* 承認後の勤怠更新
+* 休憩情報の更新
+* 申請状態の更新
+
+### テスト結果
+
+全テストが成功することを確認しています。
+
+```text
+Tests: 65 passed
+Time: 5.79s
+```
 
 ## 補足説明
 
@@ -400,6 +638,3 @@ Bladeキャッシュを再作成する場合：
 ```bash
 docker compose exec -u www-data php bash -lc "cd /var/www && php artisan view:clear && php artisan view:cache"
 ```
-
-## PHPUnitテスト
-
