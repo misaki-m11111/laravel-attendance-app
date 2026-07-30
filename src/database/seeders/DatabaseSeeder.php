@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
             AdminSeeder::class,
             AttendanceSeeder::class,
             BreakTimeSeeder::class,
+            User1IntentionalAttendanceSeeder::class,
         ]);
     }
 }

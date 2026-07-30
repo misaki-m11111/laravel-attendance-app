@@ -127,3 +127,32 @@
     pointer-events: none;
     user-select: none;
 }
+
+.staff-attendance__csv-area {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 35px;
+}
+
+.staff-attendance__csv-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 184px;
+    height: 50px;
+    background-color: #000000;
+    border-radius: 5px;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-decoration: none;
+}
+
+.staff-attendance__csv-button:visited {
+    color: #ffffff;
+}
+
+.staff-attendance__csv-button:hover {
+    opacity: 0.7;
+}

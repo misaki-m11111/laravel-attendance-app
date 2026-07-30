@@ -54,6 +54,13 @@ Route::middleware('auth:admin')->group(function () {
         ->name('admin.staff.show');
 
     Route::get(
+        '/admin/attendance/staff/{id}/csv',
+        [AdminStaffController::class, 'exportCsv']
+    )
+        ->where('id', '[0-9]+')
+        ->name('admin.staff.csv');
+
+    Route::get(
         '/stamp_correction_request/approve/{attendance_correct_request_id}',
         [AdminAttendanceRequestController::class, 'show']
     )
