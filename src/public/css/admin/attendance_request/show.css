@@ -1,0 +1,144 @@
+body {
+    background-color: #f0eff2;
+}
+
+.attendance-detail {
+    width: 60%;
+    max-width: 900px;
+    margin: 55px auto 0;
+}
+
+.attendance-detail__title {
+    margin: 0 0 45px;
+    padding-left: 18px;
+    border-left: 8px solid #000000;
+    color: #000000;
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.attendance-detail__card {
+    overflow: hidden;
+    background-color: #ffffff;
+    border-radius: 10px;
+}
+
+.attendance-detail__row {
+    display: flex;
+    align-items: center;
+    min-height: 67px;
+    border-bottom: 2px solid #e1e1e1;
+}
+
+.attendance-detail__row:last-child {
+    border-bottom: none;
+}
+
+.attendance-detail__row--remarks {
+    align-items: flex-start;
+    padding: 16px 0;
+}
+
+.attendance-detail__label {
+    width: 250px;
+    padding-left: 50px;
+    color: #737373;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+}
+
+.attendance-detail__value {
+    flex: 1;
+    color: #000000;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.attendance-detail__name {
+    letter-spacing: 0.15em;
+    word-spacing: 0.6em;
+}
+
+.attendance-detail__date {
+    display: grid;
+    grid-template-columns: 103px 16px 103px;
+    column-gap: 45px;
+}
+
+.attendance-detail__date span:first-child {
+    grid-column: 1;
+    text-align: center;
+}
+
+.attendance-detail__date span:last-child {
+    grid-column: 3;
+    text-align: center;
+}
+
+.attendance-detail__time {
+    display: flex;
+    align-items: center;
+    gap: 45px;
+}
+
+.attendance-detail__time-text {
+    display: block;
+    width: 103px;
+    text-align: center;
+}
+
+.attendance-detail__separator {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+}
+
+.attendance-detail__remarks-text {
+    display: block;
+    width: 316px;
+    min-height: 72px;
+    line-height: 1.6;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.attendance-detail__button-area {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 36px;
+    padding-bottom: 77px;
+}
+
+.attendance-detail__button-area form {
+    margin: 0;
+}
+
+.attendance-detail__button {
+    width: 130px;
+    height: 50px;
+    border: none;
+    border-radius: 5px;
+    background-color: #000000;
+    color: #ffffff;
+    font-size: 22px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.attendance-detail__button:not(:disabled):hover {
+    opacity: 0.8;
+}
+
+.attendance-detail__button--approved {
+    background-color: #696969;
+    cursor: default;
+    opacity: 0.7;
+}
+
+.attendance-detail__error {
+    margin: 0 0 16px;
+    color: #ff0000;
+    font-size: 14px;
+    font-weight: 700;
+}

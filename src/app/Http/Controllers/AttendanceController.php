@@ -16,7 +16,7 @@ class AttendanceController extends Controller
     /**
      * 勤怠登録画面を表示する。
      */
-    public function index(): view
+    public function index(): View
     {
         $today = Carbon::today();
 
@@ -100,7 +100,7 @@ class AttendanceController extends Controller
     /**
      * ログイン中ユーザーの月次勤怠一覧を表示する。
      */
-    public function monthlyList(Request $request): view
+    public function monthlyList(Request $request): View
     {
         if ($request->input('month')) {
             $currentMonth = Carbon::parse($request->input('month') . '-01');

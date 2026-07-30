@@ -8,20 +8,39 @@ use App\Http\Controllers\AdminAttendanceController;
 use App\Http\Controllers\AdminStaffController;
 use App\Http\Controllers\AdminAttendanceRequestController;
 
-Route::get('/admin/login', [AuthenticatedSessionController::class, 'create'])
+
+Route::get(
+    '/admin/login',
+    [AuthenticatedSessionController::class, 'create']
+)
     ->middleware('guest:admin')
     ->name('admin.login');
 
-Route::post('/admin/login', [AuthenticatedSessionController::class, 'store'])
-    ->middleware(['guest:admin', 'fortify.admin'])
+Route::post(
+    '/admin/login',
+    [AuthenticatedSessionController::class, 'store']
+)
+    ->middleware([
+        'guest:admin',
+        'fortify.admin',
+    ])
     ->name('admin.login.store');
 
-Route::post('/admin/logout', [AuthenticatedSessionController::class, 'destroy'])
-    ->middleware(['auth:admin', 'fortify.admin'])
+Route::post(
+    '/admin/logout',
+    [AuthenticatedSessionController::class, 'destroy']
+)
+    ->middleware([
+        'auth:admin',
+        'fortify.admin',
+    ])
     ->name('admin.logout');
 
 
-Route::middleware('auth:admin')->group(function () {
+Route::middleware([
+    'auth:admin',
+    'verified',
+])->group(function () {
     Route::get(
         '/admin/attendance/list',
         [AdminAttendanceController::class, 'index']
@@ -76,7 +95,10 @@ Route::middleware('auth:admin')->group(function () {
 });
 
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware([
+    'auth',
+    'verified',
+])->group(function () {
     Route::get(
         '/attendance',
         [AttendanceController::class, 'index']
@@ -107,9 +129,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('attendance.request.store');
 });
 
+
 Route::get(
     '/stamp_correction_request/list',
     [AttendanceRequestController::class, 'index']
 )
-    ->middleware('auth:admin,web')
+    ->middleware([
+        'auth:admin,web',
+        'verified',
+    ])
     ->name('attendance.request.index');

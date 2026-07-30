@@ -103,7 +103,8 @@
 
                             <td>
                                 @if ($attendance)
-                                    <a href="{{ route('attendance.detail', $attendance->id) }}" class="attendance-list__detail-link">
+                                    <a href="{{ route('attendance.detail', $attendance->id) }}"
+                                        class="attendance-list__detail-link">
                                         詳細
                                     </a>
                                 @else
