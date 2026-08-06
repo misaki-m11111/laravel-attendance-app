@@ -1,10 +1,11 @@
 <header class="header">
     <div class="header__inner">
         <div class="header__logo">
-            <img
-                src="{{ asset('images/logo.png') }}"
-                alt="COACHTECH"
-            >
+            <span class="header__logo-mark" aria-hidden="true"></span>
+
+            <span class="header__logo-text">
+                Attendly
+            </span>
         </div>
 
         @unless (request()->routeIs('verification.notice'))
@@ -22,10 +23,7 @@
                         申請一覧
                     </a>
 
-                    <form
-                        method="POST"
-                        action="{{ route('admin.logout') }}"
-                    >
+                    <form method="POST" action="{{ route('admin.logout') }}">
                         @csrf
 
                         <button type="submit">
@@ -33,7 +31,6 @@
                         </button>
                     </form>
                 </nav>
-
             @elseif (Auth::guard('web')->check())
                 <nav class="header__nav">
                     <a href="{{ route('attendance.index') }}">
@@ -48,10 +45,7 @@
                         申請
                     </a>
 
-                    <form
-                        method="POST"
-                        action="{{ route('logout') }}"
-                    >
+                    <form method="POST" action="{{ route('logout') }}">
                         @csrf
 
                         <button type="submit">
@@ -60,7 +54,6 @@
                     </form>
                 </nav>
             @endif
-
         @endunless
     </div>
 </header>
